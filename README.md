@@ -1,5 +1,7 @@
 # AdX · Sample Expert Playbooks · live demo
 
+> **📘 New: full engine architecture doc** — [`ARCHITECTURE.md`](ARCHITECTURE.md) is the single source of truth. 16-page Playbook map · 259 evaluators · 36 agents in 6 layers · in-memory integration · public API · schemas · 5 evaluation paths · FAQ. Companion: [`EVALUATORS.md`](EVALUATORS.md) lists all 259 checks ID-by-ID. Integration: [`INTEGRATION.md`](INTEGRATION.md) + [`PRUDHVI_BUILD_ENGINE_INPUT.py`](PRUDHVI_BUILD_ENGINE_INPUT.py).
+
 **3 ways to see what AdX builds · pick your time budget:**
 
 | # | Path | Time | What you see |
