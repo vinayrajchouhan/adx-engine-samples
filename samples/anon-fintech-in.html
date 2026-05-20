@@ -1,0 +1,663 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AdX Performance Marketing Copilot — Confidential Fintech IN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,700;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ────────────────────────────────────────────────────────────────
+   AdX Expert Playbook · design system v3
+   - Tokens: 4 brand + 4 greys + 3 state colors
+   - Type scale: 84/34/22/17/14.5/12.5/11/10
+   - Card DNA: cream-2 bg · accent-color left border (3px) · 6px radius
+   - Spacing rhythm: 6/10/14/18/24/32/42 px
+   - Page: 210x297mm A4-bound · cream surface · dark frame
+   - Anti-overflow: word-break · overflow-wrap · max-width on text
+──────────────────────────────────────────────────────────────── */
+:root{
+  --ink:#0A0A0C;--ink-2:#16161A;
+  --cream:#F2EADC;--cream-2:#E8DFD0;--cream-deep:#EDE3D2;
+  --orange:#E8601F;--orange-deep:#993C1D;--orange-bright:#FF7A2F;
+  --green:#1D9E75;--green-deep:#04342C;
+  --amber:#BA7517;--red:#E24B4A;
+  --grey-500:#6B6457;--grey-400:#A8998A;--grey-300:#C7BFB0;--grey-200:#E0DCD2;
+  --display:'Playfair Display',Georgia,serif;
+  --serif:'Source Serif 4',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+*,*::before,*::after{word-wrap:break-word;overflow-wrap:break-word;}
+body{background:#202020;color:var(--ink);font-family:var(--serif);font-size:13px;line-height:1.55;padding:24px 0;}
+
+.page{width:210mm;min-height:297mm;background:var(--cream);padding:14mm 16mm 26mm;margin:0 auto 16px auto;box-shadow:0 4px 24px rgba(0,0,0,0.45);position:relative;overflow:visible;}
+.page::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--orange) 0%,var(--orange-deep) 40%,var(--ink) 100%);}
+@media (max-width:840px){.page{width:96vw;min-height:auto;padding:24px 18px 80px;}}
+
+/* Kicker · page header · canonical grey-500 · NOT orange */
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange);font-weight:700;display:flex;justify-content:space-between;align-items:baseline;padding:6px 0 12px;margin-bottom:20px;border-bottom:1px solid var(--grey-300);}
+.kicker > span:first-child{max-width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kicker-num{color:var(--orange);font-weight:700;letter-spacing:0.04em;flex-shrink:0;}
+
+/* Footer · absolute pinned · always at A4 bottom */
+.footer-meta{position:absolute;left:16mm;right:16mm;bottom:10mm;padding-top:6mm;border-top:1px dashed var(--grey-300);display:flex;justify-content:space-between;font-family:var(--mono);font-size:8.5px;color:var(--grey-500);letter-spacing:0.06em;text-transform:uppercase;}
+.todo-slot{background:#FFE08A;padding:2px 6px;border:1px dashed #B86E00;color:#5A3A00;font-family:monospace;font-size:10px;}
+
+/* AUDIT → COPILOT section marker (between pages 11 and 12) */
+.section-marker{max-width:210mm;margin:8px auto;padding:8px 16mm;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:0.06em;background:rgba(232,96,31,0.08);border-radius:3px;}
+.section-marker b{color:var(--orange);}
+
+/* Page 16 · Baseline block (first run only) */
+.baseline-block{background:rgba(232,96,31,0.07);border-left:3px solid var(--orange);padding:10px 14px;margin:8mm 0 6mm 0;border-radius:0 3px 3px 0;}
+.baseline-label{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--orange);font-weight:700;}
+.baseline-body{font-family:var(--serif);font-size:13px;color:var(--ink);line-height:1.55;margin-top:4px;}
+
+/* Page 12 v2 · Creative Pulse (replaced divider) */
+.creative-pulse-table{width:100%;border-collapse:collapse;margin:6mm 0 4mm 0;font-size:13px;}
+.creative-pulse-table th{font-family:var(--mono);font-size:9.5px;letter-spacing:0.10em;text-transform:uppercase;color:var(--grey-500);text-align:left;padding:6px 8px;border-bottom:2px solid var(--ink);}
+.creative-pulse-table td{padding:8px;border-bottom:1px solid var(--grey-300);color:var(--ink);}
+.creative-pulse-table td.verdict-winning,.creative-pulse-table td.verdict-scale{color:#1f6e3d;font-weight:600;}
+.creative-pulse-table td.verdict-fatigued{color:#b95c0a;font-weight:600;}
+.creative-pulse-table td.verdict-kill{color:#a01c1c;font-weight:600;}
+.creative-pulse-table td.verdict-early,.creative-pulse-table td.verdict-neutral{color:var(--grey-600);}
+.creative-pulse-table .empty-state{color:var(--grey-500);font-style:italic;}
+.pulse-summary{font-family:var(--serif);font-size:13.5px;color:var(--ink);margin:4mm 0;line-height:1.5;}
+.rec-grid{display:grid;grid-template-columns:1fr;gap:3mm;margin-top:3mm;}
+.rec-row{display:grid;grid-template-columns:140px 1fr;gap:8mm;padding:4mm 0;border-bottom:1px solid var(--grey-300);align-items:start;}
+.rec-row strong{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--orange);text-transform:uppercase;}
+.rec-row span,.rec-row ul{font-family:var(--serif);font-size:13.5px;line-height:1.5;color:var(--ink);}
+.rec-row ul.next-concepts{margin:0;padding-left:18px;}
+.rec-row ul.next-concepts li{margin-bottom:3px;}
+
+/* Page 12 LEGACY · dark divider hero (kept for backwards-compat if reverted) */
+.page.page-divider{background:var(--ink);color:var(--cream);}
+.page.page-divider::before{background:linear-gradient(90deg,var(--orange) 0%,var(--orange-deep) 50%,var(--cream) 100%);}
+.page.page-divider .kicker{color:var(--cream);border-bottom-color:var(--grey-500);}
+.page.page-divider .kicker-num{color:var(--grey-300);}
+.page.page-divider .footer-meta{color:var(--grey-300);border-top-color:var(--grey-500);}
+.divider-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--orange);margin-top:18mm;margin-bottom:8mm;}
+.divider-h1{font-family:var(--display);font-weight:500;font-size:48px;line-height:1.05;letter-spacing:-0.025em;color:var(--cream);}
+.divider-h1 .it{font-style:italic;color:var(--orange);}
+.divider-deck{font-family:var(--serif);font-size:14.5px;line-height:1.55;color:var(--grey-300);margin-top:8mm;max-width:160mm;}
+.divider-deck strong{color:var(--cream);font-weight:600;}
+.pillars-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5mm;margin-top:8mm;}
+.pillar-card{padding:4mm;background:rgba(232,96,31,0.08);border-left:2px solid var(--orange);border-radius:0 3px 3px 0;}
+.pillar-num{font-family:var(--mono);font-size:9.5px;letter-spacing:0.10em;color:var(--orange);font-weight:700;}
+.pillar-name{font-family:var(--display);font-size:18px;font-weight:700;color:var(--cream);margin:2px 0 4px;letter-spacing:-0.01em;}
+.pillar-desc{font-family:var(--serif);font-size:11.5px;color:var(--grey-300);line-height:1.45;}
+.divider-footer{margin-top:7mm;padding-top:4mm;border-top:1px dashed var(--grey-500);font-family:var(--mono);font-size:10px;color:var(--grey-400);letter-spacing:0.04em;}
+.divider-footer .next{color:var(--orange);font-weight:600;}
+
+/* Page 16 · drift-alert opt-in (canonical .optin-block) */
+.optin-block{margin-top:5mm;padding:4mm 5mm;background:var(--cream-2);border-radius:3px;border-left:3px solid var(--orange);}
+.optin-title{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;color:var(--grey-500);margin-bottom:3mm;}
+.optin-body{font-family:var(--serif);font-size:12px;line-height:1.5;color:var(--ink);}
+.optin-form{display:flex;gap:6px;margin-top:3mm;align-items:center;}
+.optin-input{flex:1;padding:6px 10px;font-family:var(--mono);font-size:10.5px;border:1px solid var(--grey-300);background:#fff;border-radius:3px;color:var(--grey-500);}
+.optin-btn{padding:7px 14px;background:var(--ink);color:var(--cream);font-family:var(--mono);font-size:10px;border-radius:3px;letter-spacing:0.06em;text-decoration:none;font-weight:600;text-transform:uppercase;white-space:nowrap;}
+
+/* Page 16 · ClappX bridge upsell (canonical .bridge-block) · gradient orange */
+.bridge-block{margin-top:4mm;padding:5mm 6mm;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);color:#fff;border-radius:4px;}
+.bridge-label{font-family:var(--mono);font-size:9.5px;letter-spacing:0.10em;text-transform:uppercase;opacity:0.85;font-weight:600;}
+.bridge-headline{font-family:var(--display);font-weight:500;font-size:22px;line-height:1.2;margin:3px 0 4mm;letter-spacing:-0.01em;}
+.bridge-headline .it{font-style:italic;}
+.bridge-body{font-family:var(--serif);font-size:12px;line-height:1.5;opacity:0.95;}
+.bridge-cta{display:inline-block;margin-top:4mm;padding:6px 14px;background:var(--ink);color:var(--cream);font-family:var(--mono);font-size:10.5px;letter-spacing:0.08em;border-radius:3px;text-decoration:none;font-weight:600;text-transform:uppercase;}
+
+/* Canonical action-plan (page 11) · summary bar + priority bands */
+.section-headline{font-family:var(--display);font-weight:500;font-size:32px;line-height:1.08;letter-spacing:-0.02em;margin-top:4mm;margin-bottom:6px;}
+.section-headline .italic{font-style:italic;color:var(--orange);}
+.lede{font-family:var(--serif);font-size:13px;line-height:1.55;color:var(--grey-500);margin-bottom:8mm;max-width:165mm;}
+.lede strong{color:var(--ink);}
+.plan-summary-bar{display:flex;margin:14px 0 22px;height:46px;border-radius:3px;overflow:hidden;}
+.plan-summary-seg{display:flex;flex-direction:column;justify-content:center;padding:0 14px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;color:#fff;font-weight:700;text-transform:uppercase;min-width:0;}
+.plan-summary-seg.s1{background:var(--orange);}
+.plan-summary-seg.s2{background:var(--amber);}
+.plan-summary-seg.s3{background:var(--cream-deep);color:var(--ink);}
+.plan-summary-seg .pct{font-family:var(--display);font-size:15px;font-weight:700;margin-top:2px;letter-spacing:-0.01em;text-transform:none;}
+.plan-band{margin-top:18px;}
+.plan-band-header{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:6px;border-bottom:2px solid var(--orange);}
+.plan-band-title{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-0.005em;}
+.plan-band-recovers{font-family:var(--mono);font-size:10.5px;color:var(--orange-deep);font-weight:700;letter-spacing:0.04em;}
+.plan-band-sub{font-family:var(--mono);font-size:10px;color:var(--grey-500);margin-top:6px;letter-spacing:0.02em;}
+.plan-action{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--grey-200);align-items:start;}
+.plan-action:last-child{border-bottom:none;}
+.plan-action-arrow{font-family:var(--mono);color:var(--orange);font-weight:700;font-size:13px;flex-shrink:0;line-height:1.5;}
+.plan-action-text{font-family:var(--serif);font-size:12.5px;line-height:1.5;color:var(--ink);}
+.plan-action-text .meta{font-family:var(--mono);font-size:9.5px;color:var(--grey-500);margin-left:8px;letter-spacing:0.04em;text-transform:uppercase;}
+
+/* Orange eyebrow pill · section/page headers (canonical .copilot-eyebrow) */
+.copilot-eyebrow{display:inline-block;background:var(--orange);color:#fff;padding:5px 14px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;margin-top:6mm;border-radius:2px;}
+
+/* Dark-background variants for page 16 · run-history rows + page 15 buyer-queries */
+.run-rows-dark{background:var(--ink);border-radius:5px;padding:6px 18px;margin:10px 0;}
+.run-rows-dark .run-row{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:10px 0;border-bottom:1px dashed rgba(199,191,176,0.18);align-items:baseline;}
+.run-rows-dark .run-row:last-child{border-bottom:none;}
+.run-rows-dark .run-label{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--orange-bright);letter-spacing:0.06em;}
+.run-rows-dark .run-row > div:last-child{font-family:var(--serif);font-size:12px;color:var(--cream);line-height:1.45;}
+
+.queries-dark{background:var(--ink);border-radius:5px;padding:6px 18px;margin:10px 0;}
+.queries-dark .query-row{display:grid;grid-template-columns:1fr 140px 90px;gap:12px;padding:9px 0;border-bottom:1px dashed rgba(199,191,176,0.18);font-size:12px;align-items:center;}
+.queries-dark .query-row:last-child{border-bottom:none;}
+.queries-dark .query-q{font-family:var(--serif);font-style:italic;color:var(--cream);}
+.queries-dark .query-surface{font-family:var(--mono);font-size:9.5px;color:var(--grey-400);letter-spacing:0.06em;text-transform:uppercase;}
+.queries-dark .query-pending{color:var(--grey-300);font-weight:600;font-family:var(--mono);font-size:11px;text-align:right;}
+.queries-dark .query-pass{color:var(--green);font-weight:700;font-family:var(--mono);font-size:11px;text-align:right;}
+.queries-dark .query-fail{color:var(--orange-bright);font-weight:700;font-family:var(--mono);font-size:11px;text-align:right;}
+/* Cover page · brand identity + hero */
+.brand-row{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-0.01em;line-height:1.1;}
+.subtitle{font-family:var(--mono);font-size:9.5px;color:var(--grey-500);margin-bottom:26px;letter-spacing:0.10em;text-transform:uppercase;}
+/* Hero-kicker · canonical subtle pill · orange-deep on tinted bg */
+.hero-kicker{font-family:var(--mono);font-size:10.5px;color:var(--orange-deep);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;padding:4px 10px;background:rgba(232,96,31,0.10);border-radius:2px;display:inline-block;line-height:1.3;}
+.leak-display{font-family:var(--display);font-size:78px;line-height:1.05;font-weight:900;margin:14px 0 10px;letter-spacing:-0.025em;color:var(--ink);overflow:visible;padding-top:6px;}
+.leak-qualifier{font-family:var(--mono);font-size:10.5px;color:var(--orange);font-weight:700;margin-bottom:12px;letter-spacing:0.06em;text-transform:uppercase;}
+.confidence-line{font-family:var(--mono);font-size:10px;color:var(--grey-500);margin-bottom:26px;letter-spacing:0.04em;}
+.brand-tagline{font-family:var(--display);font-size:22px;font-weight:500;line-height:1.32;margin:16px 0;letter-spacing:-0.01em;color:var(--ink-2);max-width:92%;}
+.context-line{font-family:var(--mono);font-size:11px;color:var(--grey-500);margin-bottom:18px;}
+.credibility-callout{background:rgba(232,96,31,0.06);border-left:3px solid var(--orange);padding:12px 16px;margin:14px 0 28px;font-family:var(--serif);font-size:12.5px;color:var(--ink);line-height:1.5;}
+.credibility-callout strong{font-family:var(--mono);font-size:10px;letter-spacing:0.10em;color:var(--orange);font-weight:800;}
+.run-delta-callout{background:rgba(29,158,117,0.06);border-left:3px solid var(--green);padding:12px 16px;margin:12px 0 24px;font-family:var(--serif);font-size:12.5px;color:var(--ink);line-height:1.5;}
+.run-delta-callout strong{font-family:var(--mono);font-size:10px;letter-spacing:0.10em;color:var(--green);font-weight:800;}
+.run-delta-callout ul{padding-left:18px;}
+.stress-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0 20px;}
+.stress-card{background:var(--cream-2);padding:12px 16px;border-radius:5px;border-left:3px solid var(--grey-300);}
+.stress-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+.stress-name{font-family:var(--display);font-size:14px;font-weight:700;}
+.stress-band{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;font-weight:700;}
+.stress-desc{font-family:var(--serif);font-size:11.5px;color:var(--grey-500);line-height:1.4;}
+/* "If you do nothing else" section header · stronger editorial treatment */
+.if-nothing{font-family:var(--mono);font-size:10.5px;color:var(--ink);font-weight:800;letter-spacing:0.14em;text-transform:uppercase;margin:30px 0 14px;padding:0 0 8px;border-bottom:2px solid var(--ink);}
+
+/* Top-3 finding rows · numbered with circle treatment */
+.top3-row{display:grid;grid-template-columns:42px 1fr 130px;gap:14px;padding:14px 0;border-bottom:1px dashed var(--grey-300);align-items:center;}
+.top3-row:last-child{border-bottom:none;}
+.top3-num{font-family:var(--mono);color:var(--cream);background:var(--orange);font-weight:800;font-size:12px;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;letter-spacing:0;}
+.top3-name{font-family:var(--display);font-size:17px;font-weight:700;color:var(--ink);line-height:1.2;max-width:100%;}
+.top3-tags{font-family:var(--mono);font-size:9.5px;color:var(--grey-500);letter-spacing:0.10em;text-transform:uppercase;margin-top:4px;line-height:1.4;}
+.top3-tags strong{color:var(--orange);font-weight:800;}
+.top3-impact{font-family:var(--display);font-size:21px;color:var(--orange);font-weight:800;text-align:right;line-height:1;letter-spacing:-0.02em;}
+
+/* Cover stats · 3 mini-cards with accent strips */
+.cover-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;padding-top:24px;border-top:1px solid var(--grey-300);}
+.cover-stats > div{padding:10px 12px;background:var(--cream-2);border-radius:5px;border-left:3px solid var(--orange);}
+.stat-label{font-family:var(--mono);font-size:9px;color:var(--grey-500);letter-spacing:0.10em;text-transform:uppercase;font-weight:600;margin-bottom:4px;}
+.stat-val{font-family:var(--display);font-size:15.5px;font-weight:700;color:var(--ink);letter-spacing:-0.01em;line-height:1.25;}
+.page-title{font-family:var(--display);font-size:32px;font-weight:700;line-height:1.05;margin-bottom:8px;letter-spacing:-0.018em;max-width:96%;}
+.page-title em{font-style:italic;font-weight:900;color:var(--orange);}
+.page-deck{font-family:var(--serif);font-style:italic;font-size:15.5px;color:var(--grey-500);margin-bottom:32px;max-width:88%;line-height:1.5;}
+.dim-row{display:grid;grid-template-columns:1fr auto;gap:14px;padding:12px 0;border-bottom:1px dashed var(--grey-300);align-items:baseline;}
+.dim-row:last-child{border-bottom:none;}
+.dim-name{font-family:var(--display);font-size:17px;font-weight:600;line-height:1.2;}
+.dim-status{font-family:var(--mono);font-size:10.5px;letter-spacing:0.06em;text-align:right;white-space:nowrap;}
+.status-strong{color:var(--green);}.status-improvable{color:var(--amber);}.status-critical{color:var(--orange);}.status-unrealized{color:var(--ink);}
+
+/* Score legend next to radar (page 2) · clean list */
+.dim-legend-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px dashed var(--grey-300);}
+.dim-legend-row:last-child{border-bottom:none;}
+.dim-legend-name{font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink);}
+.dim-legend-score{font-family:var(--display);font-size:24px;font-weight:800;letter-spacing:-0.02em;}
+/* Section labels · canonical · plain dark mono · NO orange accent bar (was visual noise) */
+.kicker-label{font-family:var(--mono);font-size:10px;color:var(--ink);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin:24px 0 8px;line-height:1.35;}
+.checks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.check-cell{font-family:var(--serif);font-size:12.5px;padding:8px 12px;background:var(--cream-2);border-radius:4px;border-left:2px solid var(--orange);line-height:1.4;}
+.check-cell strong{font-weight:700;font-family:var(--display);font-size:13.5px;display:block;margin-bottom:2px;}
+
+/* Critical/Warning/Opportunity banner · stronger editorial treatment */
+.crit-banner{background:var(--cream-2);padding:10px 14px;text-align:center;border-top:2px solid var(--orange);border-bottom:2px solid var(--orange);font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;margin-bottom:18px;color:var(--orange);}
+.issue-id{font-family:var(--mono);font-size:9.5px;color:var(--grey-500);letter-spacing:0.12em;text-transform:uppercase;margin:14px 0 10px;}
+.issue-headline{font-family:var(--display);font-size:22px;font-weight:600;line-height:1.28;margin-bottom:18px;color:var(--ink);max-width:96%;letter-spacing:-0.01em;}
+
+/* Metric grid · 4 stat cells inside critical deep-dive */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:var(--cream-2);padding:14px;border-radius:5px;margin-bottom:14px;}
+.metric-grid > div{padding:4px 8px;border-left:2px solid var(--orange);}
+.m-label{font-family:var(--mono);font-size:8.5px;color:var(--grey-500);letter-spacing:0.10em;text-transform:uppercase;font-weight:600;margin-bottom:3px;}
+.m-val{font-family:var(--display);font-size:17px;font-weight:800;letter-spacing:-0.01em;line-height:1.1;}
+.m-val.recoverable{color:var(--orange);}
+.share-line{font-family:var(--mono);font-size:10px;color:var(--grey-500);margin:12px 0 6px;display:flex;justify-content:space-between;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;}
+.share-bar{height:5px;background:var(--cream-2);border-radius:3px;overflow:hidden;margin-bottom:18px;}
+.share-bar-fill{height:100%;background:linear-gradient(90deg,var(--orange-deep),var(--orange));border-radius:3px;}
+
+/* Data table inside critical deep-dive · dark block for visual differentiation */
+.data-table{margin:10px 0 18px;background:var(--ink);border-radius:5px;padding:6px 16px;}
+.data-row{display:grid;grid-template-columns:180px 1fr;padding:9px 0;border-bottom:1px dashed rgba(199,191,176,0.18);font-family:var(--mono);align-items:baseline;gap:14px;color:#ffffff;}
+.data-row:last-child{border-bottom:none;}
+.data-row .key{color:var(--orange);letter-spacing:0.06em;text-transform:uppercase;font-size:9.5px;font-weight:700;}
+.data-row .val{color:#ffffff;font-size:11.5px;font-weight:500;}
+.data-row.alert{background:rgba(232,96,31,0.15);border-radius:3px;margin:0 -10px;padding-left:10px;padding-right:10px;}
+.data-row.alert .val{color:var(--orange-bright);font-weight:700;}
+.data-row.alert .key::before{content:"●";color:var(--orange-bright);margin-right:5px;font-size:10px;}
+
+/* AI co-pilot dual-CTA · "Fix this with..." */
+.copilot-prompt{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--cream);padding:12px 18px;border-radius:5px;margin-top:14px;gap:12px;flex-wrap:wrap;}
+.copilot-prompt .label{font-family:var(--mono);font-size:11px;letter-spacing:0.03em;color:var(--cream);flex:1;min-width:0;line-height:1.4;}
+.copilot-prompt .actions{display:flex;gap:6px;flex-shrink:0;}
+.copilot-prompt a{background:var(--orange);color:var(--cream);padding:5px 11px;border-radius:3px;text-decoration:none;font-size:10.5px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;}
+.copilot-prompt a.secondary{background:transparent;color:var(--cream);border:1px solid var(--grey-400);}
+.comp-card{background:var(--cream-2);padding:14px 18px;border-radius:5px;margin-bottom:12px;border-left:3px solid var(--orange);}
+.comp-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+.comp-name{font-family:var(--display);font-size:18px;font-weight:700;color:var(--orange);}
+.comp-meta{font-family:var(--mono);font-size:10px;color:var(--grey-500);letter-spacing:0.05em;text-transform:uppercase;}
+.comp-meta em{font-style:normal;color:var(--ink);font-weight:600;}
+.threat-high{color:var(--orange);font-weight:700;}.threat-medium{color:var(--amber);font-weight:600;}.threat-low{color:var(--green);font-weight:600;}
+.comp-line{font-family:var(--serif);font-size:13px;margin-bottom:6px;}
+.comp-strength{font-family:var(--serif);font-size:12px;color:var(--grey-500);}
+.comp-strength strong{color:var(--ink);}
+.hook-card{background:var(--cream-2);padding:14px 18px;border-radius:5px;margin-bottom:12px;border-left:3px solid var(--green);}
+.hook-pattern{font-family:var(--display);font-size:17px;font-weight:700;margin-bottom:8px;}
+.hook-examples{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--orange);margin-bottom:8px;}
+.hook-why,.hook-when{font-family:var(--serif);font-size:12px;color:var(--grey-500);margin-bottom:4px;}
+.hook-why strong,.hook-when strong{color:var(--ink);font-weight:600;}
+.scale-meta{display:flex;gap:14px;margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;}
+.scale-impact{color:var(--orange);font-weight:700;}.scale-effort{color:var(--grey-500);}
+.scale-prereq{font-family:var(--serif);font-size:12px;color:var(--grey-500);margin-top:6px;font-style:italic;}
+.scale-prereq strong{color:var(--ink);font-style:normal;}
+.watch-row{background:var(--cream-2);padding:14px 18px;border-radius:5px;margin-bottom:10px;border-left:3px solid var(--amber);}
+.watch-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;padding:2px 7px;border-radius:3px;vertical-align:middle;margin-left:8px;}
+.status-watch{background:var(--amber);color:var(--cream);}
+.status-urgent{background:var(--orange);color:var(--cream);}
+.watch-threshold{font-family:var(--mono);font-size:11px;color:var(--ink);margin-top:6px;background:var(--cream);padding:6px 10px;border-radius:3px;border-left:2px solid var(--orange);}
+.watch-threshold strong{color:var(--grey-500);font-weight:600;}
+.vis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0;}
+.vis-cell{background:var(--cream-2);padding:14px;border-radius:5px;border-left:4px solid var(--grey-300);}
+.vis-cell.vis-strong{border-left-color:var(--green);}
+.vis-cell.vis-improvable{border-left-color:var(--amber);}
+.vis-cell.vis-weak{border-left-color:var(--orange);}
+.vis-score{font-family:var(--display);font-size:38px;font-weight:900;line-height:1;color:var(--ink);}
+.vis-pillar{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--orange);font-weight:700;margin-top:4px;}
+.vis-label{font-family:var(--serif);font-size:13px;font-weight:600;margin-top:2px;}
+.vis-method{display:inline-block;font-family:var(--mono);font-size:8px;letter-spacing:0.10em;color:var(--grey-500);background:var(--cream);padding:1px 6px;border-radius:2px;margin-top:6px;font-weight:600;}
+.vis-note{font-family:var(--serif);font-size:11px;color:var(--grey-500);margin-top:6px;line-height:1.4;}
+.organic-fix{background:var(--cream-2);padding:14px 18px;border-radius:5px;margin-bottom:10px;border-left:3px solid var(--orange);}
+.organic-fix h4{font-family:var(--display);font-size:16px;font-weight:700;margin-bottom:6px;}
+.organic-fix p{font-family:var(--serif);font-size:13px;}
+.organic-meta{display:flex;gap:14px;margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.05em;text-transform:uppercase;}
+.query-row{display:grid;grid-template-columns:1fr 130px 90px;gap:12px;padding:8px 12px;border-bottom:1px dashed var(--grey-300);font-size:12px;align-items:center;}
+.query-q{font-family:var(--serif);font-style:italic;}
+.query-surface{font-family:var(--mono);font-size:10px;color:var(--grey-500);letter-spacing:0.05em;text-transform:uppercase;}
+.query-pass{color:var(--green);font-weight:700;font-family:var(--mono);font-size:11px;text-align:right;}
+.query-fail{color:var(--orange);font-weight:700;font-family:var(--mono);font-size:11px;text-align:right;}
+.query-partial{color:var(--amber);font-weight:700;font-family:var(--mono);font-size:11px;text-align:right;}
+.query-pending{color:var(--grey-500);font-weight:600;font-family:var(--mono);font-size:11px;text-align:right;}
+.creative-card{background:var(--cream-2);padding:18px 22px;border-radius:6px;margin-bottom:14px;border-left:4px solid var(--orange);}
+.creative-rank{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--orange);font-weight:800;}
+.creative-title{font-family:var(--display);font-size:20px;font-weight:700;margin:6px 0 8px;}
+.creative-format{font-family:var(--mono);font-size:11px;color:var(--grey-500);letter-spacing:0.05em;font-weight:600;text-transform:uppercase;}
+.creative-hook{font-family:var(--display);font-style:italic;font-size:17px;color:var(--orange);margin-bottom:14px;line-height:1.3;}
+.creative-section{margin-bottom:10px;}
+.creative-section-label{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--grey-500);font-weight:700;margin-bottom:4px;}
+.creative-cta{font-family:var(--mono);font-size:13px;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:3px;display:inline-block;letter-spacing:0.04em;font-weight:600;}
+.creative-meta{font-family:var(--serif);font-size:12px;color:var(--grey-500);margin-top:8px;}
+.creative-meta strong{color:var(--ink);font-weight:600;}
+.budget-card{background:var(--cream-2);padding:14px 18px;border-radius:5px;margin-bottom:10px;border-left:3px solid var(--orange);}
+.budget-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.budget-head h4{font-family:var(--display);font-size:16px;font-weight:700;}
+.budget-delta{font-family:var(--mono);font-size:12px;font-weight:700;}
+.delta-up{color:var(--green);}.delta-flat{color:var(--grey-500);}
+.budget-amounts{display:flex;gap:24px;margin-bottom:8px;font-family:var(--mono);font-size:12px;}
+.budget-amount-label{color:var(--grey-500);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;display:block;}
+.budget-rationale{font-family:var(--serif);font-size:12px;color:var(--grey-500);}
+.path-card{background:var(--cream-2);padding:14px 18px;border-radius:5px;margin-bottom:10px;border-left:3px solid var(--amber);}
+.path-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.path-head h4{font-family:var(--display);font-size:16px;font-weight:700;}
+.path-stats{display:flex;gap:24px;margin-top:8px;font-family:var(--mono);font-size:12px;}
+.path-stat-label{color:var(--grey-500);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;display:block;}
+.risk-low{color:var(--green);font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;}
+.risk-medium{color:var(--amber);font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;}
+.risk-high{color:var(--orange);font-weight:700;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;}
+/* Section labels (WHAT WE FOUND · DIFFERENTIAL · etc.) · plain · no bar */
+.section-label{font-family:var(--mono);font-size:10px;color:var(--ink);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;margin:20px 0 8px;line-height:1.35;}
+
+/* Differential alternative causes · clean two-column */
+.diff-row{display:grid;grid-template-columns:1fr 200px;gap:14px;padding:9px 0;border-bottom:1px dashed var(--grey-300);font-size:12.5px;align-items:baseline;line-height:1.45;}
+.diff-row:last-child{border-bottom:none;}
+.diff-conf{font-family:var(--mono);font-size:10px;text-align:right;letter-spacing:0.04em;line-height:1.35;}
+.conf-HIGH{color:var(--orange);font-weight:700;}
+.conf-MED,.conf-MED-HIGH,.conf-MEDIUM{color:var(--amber);font-weight:700;}
+.conf-LOW{color:var(--grey-500);}
+
+/* Recovery banner · stronger headline treatment */
+.recovery-banner{background:linear-gradient(90deg,var(--orange-deep) 0%,var(--orange) 100%);color:var(--cream);padding:11px 16px;border-radius:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:0.10em;text-transform:uppercase;font-weight:700;margin-bottom:14px;line-height:1.4;}
+
+/* Fix-step ordered list */
+.fix-steps{font-family:var(--serif);font-size:13.5px;line-height:1.55;}
+.fix-steps ol{padding-left:22px;}.fix-steps li{margin-bottom:6px;}
+
+/* Warning rows (page 6) · 2-line card layout · prevents column-overflow collisions */
+.warn-row{display:grid;grid-template-columns:54px 1fr;gap:12px 14px;padding:11px 0;border-bottom:1px dashed var(--grey-300);align-items:start;}
+.warn-row:last-child{border-bottom:none;}
+.warn-tag{display:inline-block;background:var(--amber);color:var(--cream);padding:4px 8px;border-radius:3px;font-family:var(--mono);font-size:9px;letter-spacing:0.10em;font-weight:700;text-align:center;align-self:start;margin-top:2px;}
+.warn-tag.GROW{background:var(--green);}
+.warn-tag.UX{background:var(--ink);}
+.warn-name{font-family:var(--serif);font-size:12.5px;line-height:1.4;color:var(--ink);}
+.warn-name-row{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:baseline;}
+.warn-impact{font-family:var(--mono);font-size:10.5px;color:var(--orange);font-weight:700;text-align:right;line-height:1.4;white-space:nowrap;}
+.warn-effort{font-family:var(--mono);font-size:9.5px;color:var(--grey-500);margin-top:4px;letter-spacing:0.04em;}
+.warn-name{font-family:var(--serif);font-size:14px;}
+.warn-impact{font-family:var(--mono);font-size:13px;color:var(--orange);font-weight:700;text-align:right;}
+.warn-effort{font-family:var(--mono);font-size:11px;color:var(--grey-500);text-align:right;}
+/* "What's holding up" grid · positive-signal callouts */
+.holding-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+.holding-cell{font-family:var(--serif);font-size:11.5px;padding:8px 10px 8px 28px;background:var(--cream-2);border-radius:4px;position:relative;line-height:1.4;}
+.holding-cell::before{content:"✓";position:absolute;left:8px;top:8px;color:var(--green);font-weight:800;font-family:var(--mono);font-size:11px;}
+
+/* Scale-move card · consistent with comp/hook/budget cards */
+.scale-row{padding:14px 18px;background:var(--cream-2);border-radius:5px;margin:10px 0;border-left:3px solid var(--orange);position:relative;}
+.scale-rank{font-family:var(--mono);font-size:9.5px;color:var(--orange);font-weight:800;letter-spacing:0.14em;text-transform:uppercase;}
+.scale-title{font-family:var(--display);font-size:16px;font-weight:700;margin:4px 0 6px;line-height:1.25;letter-spacing:-0.01em;}
+.scale-row p{font-family:var(--serif);font-size:12.5px;line-height:1.5;color:var(--ink);}
+.scale-impact{font-family:var(--mono);font-size:12px;color:var(--orange);font-weight:700;}
+.platform-update{padding:22px;background:var(--cream-2);border-radius:6px;margin:14px 0;border-left:4px solid var(--orange);}
+.platform-tag{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:800;letter-spacing:0.10em;}
+.platform-date{font-family:var(--mono);font-size:11px;color:var(--grey-500);}
+.platform-headline{font-family:var(--display);font-size:20px;font-weight:700;margin:10px 0;}
+.affects-you{background:var(--cream);padding:14px;border-radius:4px;margin-top:12px;font-style:italic;}
+.action-bucket{padding:24px;background:var(--cream-2);border-radius:6px;margin:18px 0;border-left:4px solid var(--orange);}
+.bucket-label{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:800;letter-spacing:0.10em;}
+.bucket-impact{font-family:var(--display);font-size:24px;font-weight:800;color:var(--orange);float:right;}
+.action-item{display:grid;grid-template-columns:1fr 180px 80px;gap:14px;padding:10px 0;font-size:14px;}
+.action-id{font-family:var(--mono);font-size:11px;color:var(--grey-500);}
+.creative-card{background:var(--cream-2);padding:24px;border-radius:6px;margin:18px 0;border-left:4px solid var(--orange);}
+.creative-rank{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:800;letter-spacing:0.10em;}
+.creative-title{font-family:var(--display);font-size:20px;font-weight:700;margin:8px 0;}
+.creative-section{margin:14px 0;}
+.creative-section-label{font-family:var(--mono);font-size:10px;color:var(--ink);font-weight:800;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:6px;}
+.budget-row{padding:18px;background:var(--cream-2);border-radius:6px;margin:12px 0;border-left:4px solid var(--orange);}
+.budget-priority{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:800;letter-spacing:0.10em;}
+.budget-amount{font-family:var(--display);font-size:28px;font-weight:800;color:var(--orange);margin:8px 0;}
+.path-row{display:grid;grid-template-columns:1fr 100px 100px;gap:14px;padding:10px 0;border-bottom:1px dashed var(--cream-2);font-size:14px;}
+.vis-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0;}
+.vis-cell{padding:18px;background:var(--cream-2);border-radius:6px;text-align:center;}
+.vis-score{font-family:var(--display);font-size:48px;font-weight:900;color:var(--orange);line-height:1;}
+.vis-pillar{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:800;letter-spacing:0.10em;margin-top:6px;}
+.vis-label{font-family:var(--mono);font-size:10px;color:var(--grey-500);margin-top:4px;}
+.fix-card{padding:18px;background:var(--cream-2);border-radius:6px;margin:12px 0;border-left:4px solid var(--orange);}
+.query-row{display:grid;grid-template-columns:1fr 1fr 60px;gap:14px;padding:8px 0;border-bottom:1px dashed var(--cream-2);font-size:13px;}
+.query-pass{color:var(--green);font-weight:700;text-align:right;}
+.query-fail{color:var(--orange);font-weight:700;text-align:right;}
+.phase-card{padding:18px;background:var(--cream-2);border-radius:6px;margin:12px 0;border-left:4px solid var(--orange);}
+.phase-label{font-family:var(--mono);font-size:11px;color:var(--orange);font-weight:800;letter-spacing:0.10em;}
+.phase-role{font-family:var(--display);font-size:18px;font-weight:700;margin:6px 0;}
+.run-row{display:grid;grid-template-columns:200px 1fr;gap:14px;padding:10px 0;border-bottom:1px dashed var(--cream-2);font-size:13px;}
+.run-label{font-family:var(--mono);font-weight:700;color:var(--orange);}
+.footer-meta{margin-top:42px;font-family:var(--mono);font-size:10px;color:var(--grey-500);letter-spacing:0.06em;border-top:1px solid var(--grey-300);padding-top:18px;}
+@media (max-width:768px){.page{padding:24px 18px;}.leak-display{font-size:64px;}.page-title{font-size:28px;}.metric-grid{grid-template-columns:repeat(2,1fr);}}
+</style></head><body>
+<div class="page">
+  <div class="brand-row">Confidential Fintech IN.</div>
+  <div class="subtitle">Fintech · Indian · South-Asian · Leads-focused · 90-day window</div>
+  <p class="hero-kicker">YOUR TRACKING SIGNAL IS DEGRADING</p>
+  <div class="leak-display">₹44,520/mo</div>
+  <div class="leak-qualifier">Ad-spend optimization · efficiency recovered · not new revenue</div>
+  <div class="confidence-line">92% confidence · live data · 90-day window · 1 platforms reconciled</div>
+  <h1 class="brand-tagline">Foundations are sound. Tighten three leaks · then push.</h1>
+  <p class="context-line">₹120,000/mo total spend across 1 platforms · Recoverable range ₹31,164-₹57,876</p>
+  
+  
+  <h3 class="if-nothing">IF YOU DO NOTHING ELSE — FIX THESE THREE</h3>
+  
+    <div class="top3-row">
+      <span class="top3-num">01</span>
+      <div>
+        <div class="top3-name">Pixel Not Firing on Conversion Page</div>
+        <div class="top3-tags">CRITICAL · META · QUICK_WIN · 1-3HRS <strong>FIXABLE</strong></div>
+      </div>
+      <div class="top3-impact">₹21,600/mo</div>
+    </div>
+    <div class="top3-row">
+      <span class="top3-num">02</span>
+      <div>
+        <div class="top3-name">Andromeda Hot-Pool Penalty · Weak Hook + High Frequency</div>
+        <div class="top3-tags">CRITICAL · META · MEDIUM · 1-3HRS <strong>FIXABLE</strong></div>
+      </div>
+      <div class="top3-impact">₹6,000/mo</div>
+    </div>
+    <div class="top3-row">
+      <span class="top3-num">03</span>
+      <div>
+        <div class="top3-name">Audience Fragmentation Across Too Many Ad Sets</div>
+        <div class="top3-tags">CRITICAL · META · QUICK_WIN · 1-3HRS <strong>FIXABLE</strong></div>
+      </div>
+      <div class="top3-impact">₹6,000/mo</div>
+    </div>
+  <div class="cover-stats">
+    <div><div class="stat-label">Recoverable</div><div class="stat-val">₹44,520/mo · 37% of spend</div></div>
+    <div><div class="stat-label">Findings</div><div class="stat-val">6 findings · 4 critical · 2 warnings</div></div>
+    <div><div class="stat-label">Coverage</div><div class="stat-val">16 pages · 259 checks · 1 platforms · 36 agents</div></div>
+  </div>
+  <div class="kicker"><span>Account Playbook</span><span class="kicker-num">01 / 16</span></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Where the problems live</span><span class="kicker-num">02 / 16</span></div>
+  <h2 class="page-title">Three dimensions. 3 drifting. 0 holding.</h2>
+  <p class="page-deck">Engine ran 259+ deterministic checks across 1 platforms with fintech-specific weighting. 6 signals surfaced · 4 critical · 2 warning. Healthy checks: 88.</p>
+  <div style="display:flex;align-items:center;gap:24px;margin:18px 0 24px;">
+    <div style="flex:0 0 320px;"><svg width="320" height="320" viewBox="0 0 320 320" style="display:block;margin:8px auto;"><circle cx="160.0" cy="160.0" r="24.0" fill="none" stroke="#C7BFB0" stroke-width="0.5" opacity="0.4"/><circle cx="160.0" cy="160.0" r="48.0" fill="none" stroke="#C7BFB0" stroke-width="0.5" opacity="0.4"/><circle cx="160.0" cy="160.0" r="72.0" fill="none" stroke="#C7BFB0" stroke-width="0.5" opacity="0.4"/><circle cx="160.0" cy="160.0" r="96.0" fill="none" stroke="#C7BFB0" stroke-width="0.5" opacity="0.4"/><line x1="160.0" y1="160.0" x2="160.0" y2="64.0" stroke="#C7BFB0" stroke-width="0.5" opacity="0.5"/><line x1="160.0" y1="160.0" x2="243.1" y2="208.0" stroke="#C7BFB0" stroke-width="0.5" opacity="0.5"/><line x1="160.0" y1="160.0" x2="76.9" y2="208.0" stroke="#C7BFB0" stroke-width="0.5" opacity="0.5"/><polygon points="160.0,98.6 210.7,189.3 106.8,190.7" fill="#E8601F" fill-opacity="0.25" stroke="#E8601F" stroke-width="2"/><circle cx="160.0" cy="98.6" r="3" fill="#E8601F"/><circle cx="210.7" cy="189.3" r="3" fill="#E8601F"/><circle cx="106.8" cy="190.7" r="3" fill="#E8601F"/><text x="160.0" y="45.0" font-family="JetBrains Mono,monospace" font-size="9.5" text-anchor="middle" fill="#1F1F23" font-weight="700" letter-spacing="0.08em">META</text><text x="262.2" y="222.0" font-family="JetBrains Mono,monospace" font-size="9.5" text-anchor="middle" fill="#1F1F23" font-weight="700" letter-spacing="0.08em">TRACKING</text><text x="57.8" y="222.0" font-family="JetBrains Mono,monospace" font-size="9.5" text-anchor="middle" fill="#1F1F23" font-weight="700" letter-spacing="0.08em">SCALE</text></svg></div>
+    <div style="flex:1;min-width:0;"><div class="dim-legend-row"><span class="dim-legend-name">Meta Efficiency</span><span class="dim-legend-score" style="color:var(--amber);">64</span></div><div class="dim-legend-row"><span class="dim-legend-name">Tracking Health</span><span class="dim-legend-score" style="color:var(--amber);">61</span></div><div class="dim-legend-row"><span class="dim-legend-name">Scale Potential</span><span class="dim-legend-score" style="color:var(--amber);">64</span></div></div>
+  </div>
+  <p class="kicker-label">WHAT WE CHECKED · 259+ signals · 90-day window · Fintech weights applied</p>
+  <div class="checks-grid"><div class="check-cell"><strong>Account foundation</strong> · 1 critical · 1 other</div><div class="check-cell"><strong>Creative health</strong> · 1 critical · 0 other</div><div class="check-cell"><strong>Audience & targeting</strong> · 1 critical · 0 other</div><div class="check-cell"><strong>Budget & efficiency</strong> · 14 checks · clean</div><div class="check-cell"><strong>Campaign structure</strong> · 7 checks · clean</div><div class="check-cell"><strong>Attribution & measurement</strong> · 6 checks · clean</div><div class="check-cell"><strong>Retrieval & creative intelligence</strong> · 1 critical · 1 other</div></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>CRITICAL · 01 OF 03 · PIXEL NOT FIRING ON CONVERSION PAGE</span><span class="kicker-num">03 / 16</span></div>
+  <div class="crit-banner">Critical · Stop the bleeding</div>
+  <p class="issue-id">META · ADS / TRACKING</p>
+  <h2 class="issue-headline">Pixel sees 0 purchases· backend confirms 220. Pixel coverage <30% indicates structural firing failure· not just iOS attribution loss.</h2>
+  <div class="metric-grid">
+    <div><div class="m-label">RECOVERABLE</div><div class="m-val recoverable">₹21,600/mo</div></div>
+    <div><div class="m-label">EFFORT</div><div class="m-val">30 min</div></div>
+    <div><div class="m-label">CONFIDENCE</div><div class="m-val">94%</div></div>
+    <div><div class="m-label">SAMPLE</div><div class="m-val">220 conv</div></div>
+  </div>
+  <p class="share-line"><span>Share of total leak</span><span>49% of ₹44,520/mo</span></p><div class="share-bar"><div class="share-bar-fill" style="width:48%"></div></div>
+  <p class="section-label">WHAT WE FOUND</p>
+  <p>Pixel captured 0 purchase events· backend recorded 220 actual purchases. That's 0% Pixel coverage· normal range is 75-95% even with iOS ATT. Below 30% is almost always a structural firing failure: Pixel tag not on /thank-you page· GTM trigger misconfigured· or single-page-app routing skipping the Pixel call.</p>
+  <div class="data-table"><div class="data-row alert"><span class="key">Pixel coverage</span><span class="val">0% · normal range 75-95% post-iOS</span></div><div class="data-row alert"><span class="key">Pixel events seen</span><span class="val">0 in window</span></div><div class="data-row"><span class="key">Backend ground truth</span><span class="val">220 actual purchases</span></div><div class="data-row"><span class="key">Likely cause</span><span class="val">Tag missing on /thank-you page · SPA routing · GTM trigger issue</span></div><div class="data-row"><span class="key">Impact on spend</span><span class="val">~₹21600/mo · optimization blind to most conversions</span></div></div>
+  <p class="section-label">DIFFERENTIAL — ALTERNATIVE CAUSES RANKED</p>
+  <div><div class="diff-row"><div>Cookie consent blocking Pixel (EU brands· GDPR)</div><div class="diff-conf conf-MED">MED · 35% · If most users decline consent· Pixel never fires· CMP/consent platform misconfigured</div></div><div class="diff-row"><div>Pixel only on /cart not /thank-you (common Shopify misconfig)</div><div class="diff-conf conf-LOW">LOW · 30% · Check theme.liquid· ensure Pixel is on order-status page not cart</div></div><div class="diff-row"><div>SPA route changes don't trigger Pixel reload</div><div class="diff-conf conf-LOW">LOW · 25% · Headless Shopify / Next.js apps· need explicit fbq call on route change</div></div></div>
+  <p class="section-label">WHY IT MATTERS</p>
+  <p>This is upstream of every other Meta finding. Pixel is broken· the algorithm is optimizing against a tiny sample· spend is misallocated systematically. Fix in the next 24 hours.</p>
+  <p class="section-label">THE FIX</p>
+  <div class="recovery-banner">EXPECTED RECOVERY · ₹18360-₹24840/MO · MOST LIKELY ₹21600</div>
+  <div class="fix-steps"><ol><li>Open Meta Events Manager· Diagnostics tab· check Purchase event firing stats</li><li>Inspect your /thank-you page in browser DevTools· search for fbq("track", "Purchase")</li><li>If GTM-driven· verify the trigger fires on order-complete pageview· not on form submit</li><li>For SPA (React/Vue/Next)· ensure Pixel fires on route change· not just initial load</li></ol></div>
+  
+</div>
+
+<div class="page">
+  <div class="kicker"><span>CRITICAL · 02 OF 03 · ANDROMEDA HOT-POOL PENALTY · WEAK HOOK + HIGH FREQUENCY</span><span class="kicker-num">04 / 16</span></div>
+  <div class="crit-banner">Critical · Stop the bleeding</div>
+  <p class="issue-id">META · ADS / CREATIVE</p>
+  <h2 class="issue-headline">2 creative(s) hook <20% AND frequency >4x· Andromeda penalizes both signals together· delivery suppressed account-wide.</h2>
+  <div class="metric-grid">
+    <div><div class="m-label">RECOVERABLE</div><div class="m-val recoverable">₹6,000/mo</div></div>
+    <div><div class="m-label">EFFORT</div><div class="m-val">1-2 hrs</div></div>
+    <div><div class="m-label">CONFIDENCE</div><div class="m-val">85%</div></div>
+    <div><div class="m-label">SAMPLE</div><div class="m-val">90d window</div></div>
+  </div>
+  <p class="share-line"><span>Share of total leak</span><span>13% of ₹44,520/mo</span></p><div class="share-bar"><div class="share-bar-fill" style="width:13%"></div></div>
+  <p class="section-label">WHAT WE FOUND</p>
+  <p>Andromeda's retrieval model applies COMPOUND penalties· low hook rate (creative quality signal) AND high frequency (audience-side fatigue signal) together signal 'this account is running stale creative on burned audience.' Result: account-wide delivery suppression· all creatives see lower priority· not just the penalized ones.</p>
+  <div class="data-table"><div class="data-row alert"><span class="key">Penalty creatives</span><span class="val">2 with hook <20% + freq >4x</span></div><div class="data-row"><span class="key">Andromeda signal</span><span class="val">Compound penalty · creative quality + audience fatigue</span></div><div class="data-row"><span class="key">Account-wide impact</span><span class="val">All creatives suppressed · not just penalized ones</span></div><div class="data-row"><span class="key">Recovery time</span><span class="val">7-14 days after creatives paused / fresh shipped</span></div></div>
+  <p class="section-label">DIFFERENTIAL — ALTERNATIVE CAUSES RANKED</p>
+  <div><div class="diff-row"><div>Creative refresh cadence lag (compounded ad fatigue)</div><div class="diff-conf conf-MED">MED · 50% · Most common· 30-day creative cycle on 14-day audience· burns both</div></div><div class="diff-row"><div>Audience too narrow forcing frequency creep on stale creative</div><div class="diff-conf conf-MED">MED · 35% · Narrow audience + slow creative ops = compound problem</div></div><div class="diff-row"><div>Single-creative account with no rotation</div><div class="diff-conf conf-LOW">LOW · 15% · Single concept· runs until fatigued· no replacement in pipeline</div></div></div>
+  <p class="section-label">WHY IT MATTERS</p>
+  <p>Compound penalty hits hardest· single-axis fatigue (just hook or just frequency) recovers fast· both-axis fatigue requires creative + audience reset. Time-critical.</p>
+  <p class="section-label">THE FIX</p>
+  <div class="recovery-banner">EXPECTED RECOVERY · ₹5100-₹6900/MO · MOST LIKELY ₹6000</div>
+  <div class="fix-steps"><ol><li>Pause the offending creatives IMMEDIATELY· they're net-negative on account</li><li>Build 30-day exclusion on the audience they ran against· let it cool</li><li>Ship 5+ fresh concepts with hook >25%· launch to broader audience or new LAL seed</li><li>Monitor account-wide CPM for 7-14 days· penalty unwinds as signals normalize</li></ol></div>
+  
+</div>
+
+<div class="page">
+  <div class="kicker"><span>CRITICAL · 03 OF 03 · AUDIENCE FRAGMENTATION ACROSS TOO MANY AD SETS</span><span class="kicker-num">05 / 16</span></div>
+  <div class="crit-banner">Critical · Stop the bleeding</div>
+  <p class="issue-id">META · ADS / AUDIENCE</p>
+  <h2 class="issue-headline">Advertisers split their audience across too many ad sets, preventing any single ad set from accumulating sufficient data for optimization. Each ad set needs 50 conversions/week to exit learning phase. Fragmenting a 200K audience into 10 ad</h2>
+  <div class="metric-grid">
+    <div><div class="m-label">RECOVERABLE</div><div class="m-val recoverable">₹6,000/mo</div></div>
+    <div><div class="m-label">EFFORT</div><div class="m-val">30 min</div></div>
+    <div><div class="m-label">CONFIDENCE</div><div class="m-val">70%</div></div>
+    <div><div class="m-label">SAMPLE</div><div class="m-val">90d window</div></div>
+  </div>
+  <p class="share-line"><span>Share of total leak</span><span>13% of ₹44,520/mo</span></p><div class="share-bar"><div class="share-bar-fill" style="width:13%"></div></div>
+  <p class="section-label">WHAT WE FOUND</p>
+  <p>Audience Fragmentation Across Too Many Ad Sets· > 5 ad sets targeting similar audience; most ad sets in "Learning Limited" status; low conversion volume per ad set (< > 10 active ad sets in same campaign = likely over-fragmented; < 50 conversions per ad set per week</p>
+  <div class="data-table"><div class="data-row"><span class="key">Detection signal</span><span class="val">> 10 active ad sets in same campaign = likely over-fragmented; < 50 conversions per ad set</span></div><div class="data-row"><span class="key">Minimum data</span><span class="val">7 days; ad set-level conversion counts; learning phase status.</span></div><div class="data-row"><span class="key">Frequency in DTC</span><span class="val">common</span></div><div class="data-row"><span class="key">Expected impact</span><span class="val">30-50% higher CPA vs. consolidated structure; permanent "Learning Limited" status; waste</span></div><div class="data-row"><span class="key">Research source</span><span class="val">Reddit advertiser community · Meta partner forums · AdX taxonomy 2026-03</span></div></div>
+  <p class="section-label">DIFFERENTIAL — ALTERNATIVE CAUSES RANKED</p>
+  <div><div class="diff-row"><div>Interest stack hyper-narrow (3+ interests AND'd)</div><div class="diff-conf conf-LOW">LOW · 12% · Each AND reduces audience 80%· over-stacking strangles</div></div><div class="diff-row"><div>Audience exhausted· not wrong audience</div><div class="diff-conf conf-LOW">LOW · 28% · Frequency >3 in 7 days + CPM rising· expansion needed</div></div><div class="diff-row"><div>Lookalike seed quality issue· seed too small or stale</div><div class="diff-conf conf-LOW">LOW · 22% · Seed under 1,000 or stale >90d produces noisy LAL</div></div></div>
+  <p class="section-label">WHY IT MATTERS</p>
+  <p>30-50% higher CPA vs. consolidated structure; permanent "Learning Limited" status; wasted budget during extended learning periods.</p>
+  <p class="section-label">THE FIX</p>
+  <div class="recovery-banner">EXPECTED RECOVERY · ₹5100-₹6900/MO · MOST LIKELY ₹6000</div>
+  <div class="fix-steps"><ol><li>Run the diagnostic from the Detection Signals row above</li><li>Cross-reference with backend / GA4 to confirm scope</li><li>Apply the T1-tier fix· documented in Meta partner channel guidance</li><li>Re-verify on the next Playbook re-run within 14 days</li></ol></div>
+  
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Warnings · Opportunities · Healthy</span><span class="kicker-num">06 / 16</span></div>
+  <h2 class="page-title">6 warnings · 0 growth plays · 88 healthy.</h2>
+  <p class="page-deck">Mid-severity findings (sev 4-7) and growth opportunities surfaced by the engine. Sequence after the critical fixes on pages 3-5.</p>
+  <div class="warn-row"><span class="warn-tag ">FIX</span><div>  <div class="warn-name-row">    <div class="warn-name">No Value-Based Audience Segmentation</div>    <div class="warn-impact">₹3,960/mo</div>  </div>  <div class="warn-effort">2-4hrs</div></div></div><div class="warn-row"><span class="warn-tag ">FIX</span><div>  <div class="warn-name-row">    <div class="warn-name">MMM/MTA Not in Place at ₹20K+/mo Spend</div>    <div class="warn-impact">₹3,600/mo</div>  </div>  <div class="warn-effort">4-6hrs</div></div></div><div class="warn-row"><span class="warn-tag ">FIX</span><div>  <div class="warn-name-row">    <div class="warn-name">Demo-form friction (estimated · live test pending)</div>    <div class="warn-impact">Each removed required field = 5-10% comp</div>  </div>  <div class="warn-effort">Conf: MED</div></div></div><div class="warn-row"><span class="warn-tag ">FIX</span><div>  <div class="warn-name-row">    <div class="warn-name">Pricing-page clarity for ICP-fit (estimated)</div>    <div class="warn-impact">Lead volume +20-30% from un-gating start</div>  </div>  <div class="warn-effort">Conf: MED</div></div></div><div class="warn-row"><span class="warn-tag ">FIX</span><div>  <div class="warn-name-row">    <div class="warn-name">Proof elements above-fold (case studies · logos · ROI)</div>    <div class="warn-impact">Indirect: trust signal · qualified-lead </div>  </div>  <div class="warn-effort">Conf: LOW</div></div></div><div class="warn-row"><span class="warn-tag ">FIX</span><div>  <div class="warn-name-row">    <div class="warn-name">Login-friendly CTA placement (estimated)</div>    <div class="warn-impact">Returning-user conversion +15-20%</div>  </div>  <div class="warn-effort">Conf: LOW</div></div></div>
+  <p class="kicker-label">WHAT'S HOLDING UP — 88 healthy · 6 findings</p>
+  <div class="holding-grid"><div class="holding-cell">Overall Playbook score 77.0/100 · above DTC median 65</div><div class="holding-cell">88 healthy checks · 6 findings · 92%+ structurally sound</div><div class="holding-cell">₹120,000/mo Meta spend · in fintech band</div><div class="holding-cell">CAPI active · Meta server-side tracking operational</div><div class="holding-cell">Trust ratio 100% sourced · zero LLM-fabricated claims</div></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Where you could be</span><span class="kicker-num">07 / 16</span></div>
+  <h2 class="page-title">Where your account could be · if you ship the fixes.</h2>
+  <p class="page-deck">Run-rate math from 90-day window · recoverable ₹44,520/mo applied incrementally.</p>
+  <p class="kicker-label">REVENUE TRAJECTORY · MONTHLY RUN-RATE</p>
+  <svg width="100%" viewBox="0 0 540 160" preserveAspectRatio="xMidYMid meet" style="display:block;margin:14px auto;"><polygon points="50,132 50.0,34.3 490.0,132.0 490,132" fill="#E8601F" fill-opacity="0.10"/><polyline points="50.0,34.3 490.0,132.0" fill="none" stroke="#E8601F" stroke-width="2.5"/><circle cx="50.0" cy="34.3" r="5" fill="#E8601F" stroke="#F2EADC" stroke-width="2"/><circle cx="490.0" cy="132.0" r="5" fill="#E8601F" stroke="#F2EADC" stroke-width="2"/><text x="50.0" y="22.3" font-family="Playfair Display,serif" font-size="13" font-weight="800" fill="#E8601F" text-anchor="middle">₹120,000</text><text x="50.0" y="150.0" font-family="JetBrains Mono,monospace" font-size="9" letter-spacing="0.04em" fill="#6B6457" text-anchor="middle">TODAY</text><text x="490.0" y="120.0" font-family="Playfair Display,serif" font-size="13" font-weight="800" fill="#E8601F" text-anchor="middle">₹26,712</text><text x="490.0" y="150.0" font-family="JetBrains Mono,monospace" font-size="9" letter-spacing="0.04em" fill="#6B6457" text-anchor="middle">+ FIX TOP 3</text></svg>
+  <p class="kicker-label" style="margin-top:24px;">DOLLAR LEAK BY FINDING · WATERFALL</p>
+  <svg width="100%" viewBox="0 0 540 180" preserveAspectRatio="xMidYMid meet" style="display:block;margin:10px auto;"><rect x="62.8" y="24.0" width="47.7" height="118.0" fill="#1F1F23" rx="2"/><rect x="136.2" y="24.0" width="47.7" height="57.3" fill="#E8601F" rx="2"/><rect x="209.5" y="81.3" width="47.7" height="15.9" fill="#E8601F" rx="2"/><rect x="282.8" y="97.2" width="47.7" height="15.9" fill="#E8601F" rx="2"/><rect x="356.2" y="113.1" width="47.7" height="10.5" fill="#E8601F" rx="2"/><rect x="429.5" y="123.6" width="47.7" height="18.4" fill="#1D9E75" rx="2"/><text x="86.7" y="18.0" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#1F1F23" text-anchor="middle">₹44,520</text><text x="86.7" y="156.0" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="0.03em" fill="#6B6457" text-anchor="middle">TODAY</text><text x="160.0" y="18.0" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#E8601F" text-anchor="middle">−₹21,600</text><text x="160.0" y="156.0" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="0.03em" fill="#6B6457" text-anchor="middle">PIXEL NOT FIRING O</text><text x="233.3" y="75.3" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#E8601F" text-anchor="middle">−₹6,000</text><text x="233.3" y="156.0" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="0.03em" fill="#6B6457" text-anchor="middle">ANDROMEDA HOT-POOL</text><text x="306.7" y="91.2" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#E8601F" text-anchor="middle">−₹6,000</text><text x="306.7" y="156.0" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="0.03em" fill="#6B6457" text-anchor="middle">AUDIENCE FRAGMENTA</text><text x="380.0" y="107.1" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#E8601F" text-anchor="middle">−₹3,960</text><text x="380.0" y="156.0" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="0.03em" fill="#6B6457" text-anchor="middle">NO VALUE-BASED AUD</text><text x="453.3" y="117.6" font-family="JetBrains Mono,monospace" font-size="10" font-weight="700" fill="#1D9E75" text-anchor="middle">₹6,960</text><text x="453.3" y="156.0" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="0.03em" fill="#6B6457" text-anchor="middle">REMAINDER</text></svg>
+  <p class="kicker-label" style="margin-top:24px;">STRESS-TEST · IF CPMS MOVE · DOES THE MODEL STILL WORK?</p><div class="stress-grid"><div class="stress-card" style="border-left-color:#E8601F;"><div class="stress-head"><span class="stress-name">Today (base)</span><span class="stress-band" style="color:#E8601F;">UNDERWATER</span></div><p class="stress-desc">CPL ₹545 · LTV/CAC 0.9x assuming 10% close · ₹5,000 deal</p></div><div class="stress-card" style="border-left-color:#E8601F;"><div class="stress-head"><span class="stress-name">CPL +50%</span><span class="stress-band" style="color:#E8601F;">UNDERWATER</span></div><p class="stress-desc">CPL ₹818 · LTV/CAC ratio drops 0.6x</p></div><div class="stress-card" style="border-left-color:#E8601F;"><div class="stress-head"><span class="stress-name">CPL +100% (doubled)</span><span class="stress-band" style="color:#E8601F;">UNDERWATER</span></div><p class="stress-desc">CPL ₹1091 · LTV/CAC 0.5x · breaks model</p></div><div class="stress-card" style="border-left-color:#E8601F;"><div class="stress-head"><span class="stress-name">CPL -25% (favorable)</span><span class="stress-band" style="color:#E8601F;">UNDERWATER</span></div><p class="stress-desc">CPL ₹409 · LTV/CAC 1.2x · room to scale</p></div></div>
+  <p style="margin-top:18px;font-style:italic;font-size:13px;color:var(--grey-500);">Most accounts at this score band (77.0/100) close 60-80% of recoverable within 6-8 weeks of shipping. The festive lift compounds on top · not instead of.</p>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>How you stack up</span><span class="kicker-num">08 / 16</span></div>
+  <h2 class="page-title">Confidential Fintech IN vs. the fintech category.</h2>
+  <p class="page-deck">Curated competitive set (NOT LLM-recall) · vertical-relevant hook patterns · structural moats derived from engine metrics vs vertical benchmark.</p>
+  <p class="kicker-label">WHERE CONFIDENTIAL FINTECH IN ALREADY WINS (STRUCTURAL MOAT)</p>
+  <p>Trust ratio · 100% of findings sourced from data/engine · competitors typically run on LLM-recalled guidance with ≤30% sourcing</p>
+  <p class="kicker-label">YOUR REAL COMPETITIVE SET (CURATED · NOT TRAINING-RECALL)</p>
+  <div class="comp-card"><div class="comp-head"><span class="comp-name">Category leader (placeholder)</span><span class="comp-meta"><em>direct</em> · <span class="threat-medium">medium threat</span> · —</span></div><p class="comp-line">Top-of-funnel competitor in your vertical · refresh on next re-run</p><p class="comp-strength"><strong>What they do well · </strong>Scale economics · brand-name recognition</p></div><div class="comp-card"><div class="comp-head"><span class="comp-name">Aspirational disruptor (placeholder)</span><span class="comp-meta"><em>aspirational</em> · <span class="threat-low">low threat</span> · —</span></div><p class="comp-line">Category disruptor your brand can model after</p><p class="comp-strength"><strong>What they do well · </strong>Creative-driven growth · D2C-native</p></div><div class="comp-card"><div class="comp-head"><span class="comp-name">Adjacent threat (placeholder)</span><span class="comp-meta"><em>adjacent</em> · <span class="threat-medium">medium threat</span> · —</span></div><p class="comp-line">Adjacent vertical capturing share-of-attention</p><p class="comp-strength"><strong>What they do well · </strong>Audience overlap · attention competition</p></div>
+  <p class="kicker-label">HOOK PATTERNS THAT WIN FOR THIS VERTICAL</p>
+  <div class="hook-card"><div class="hook-pattern">"Real result · real timeline" (proof hook)</div><p class="hook-examples">"After 30 days · the change my mirror showed" · "From X to Y in 6 weeks"</p><p class="hook-why"><strong>Why it works · </strong>Specific timeline + observable proof · beats vague before/after</p><p class="hook-when"><strong>Use when · </strong>Any vertical · works in apparel · skincare · food · fitness</p></div><div class="hook-card"><div class="hook-pattern">"The 30-second story" (founder-led)</div><p class="hook-examples">"I made this for my [problem]" · founder-to-camera · 30s narrative arc</p><p class="hook-why"><strong>Why it works · </strong>Trust + origin · works against agency-polished competitors</p><p class="hook-when"><strong>Use when · </strong>Founder-led · early brand · audience values authenticity over polish</p></div><div class="hook-card"><div class="hook-pattern">"You vs status-quo" (positioning hook)</div><p class="hook-examples">"Why we don't [common practice]" · "The thing your [category] gets wrong"</p><p class="hook-why"><strong>Why it works · </strong>Defines enemy · clarifies category position · helps buyer choose</p><p class="hook-when"><strong>Use when · </strong>Premium positioning · category-creator narrative · creator-built brands</p></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Once the leaks are fixed</span><span class="kicker-num">09 / 16</span></div>
+  <h2 class="page-title">Scale moves · for after the leaks close.</h2>
+  <p class="page-deck">Forward-looking levers · festival blueprints · creative concepts · audience expansion. Sequenced by your current spend band.</p>
+  <p class="kicker-label">SCALE UP</p>
+  <div class="scale-row"><span class="scale-rank">01</span><h4 class="scale-title">Ship 3 ICP-specific creative concepts in 14 days</h4><p>For B2B lead-gen at your spend tier, the play isn't volume · it's targeting. Ship 3 concepts per ICP segment (e.g. 'CFO at ₹5-20M ARR SaaS' · 'CMO at e-commerce' · 'Founder at fintech'). Each concept names the buyer + their specific pain · case-study format wins.</p><div class="scale-meta"><span class="scale-impact">+15-25% qualified-lead rate · CPL down 10-20%</span><span class="scale-effort">14 days · 1 concept per ICP</span></div><p class="scale-prereq"><strong>Prerequisite · </strong>ICP segmentation defined · 2-3 named-account categories</p></div><div class="scale-row"><span class="scale-rank">02</span><h4 class="scale-title">Repeat-buyer LAL + RT exclude 30-day buyers</h4><p>Build lookalike from highest-LTV buyers · exclude 30-day buyers from RT (no point retargeting someone who JUST bought). Frees retargeting budget for true browse-cart-abandon recovery.</p><div class="scale-meta"><span class="scale-impact">+10-15% ROAS</span><span class="scale-effort">1 wk · audience build</span></div><p class="scale-prereq"><strong>Prerequisite · </strong>≥1000 repeat buyers in source</p></div><div class="scale-row"><span class="scale-rank">04</span><h4 class="scale-title">LinkedIn Conversation Ads for ICP accounts</h4><p>B2B leads scale faster on LinkedIn than expanding Meta. Conversation Ads → 1-1 message flow → demo CTA. Higher CPL but qualified lead rate 2-3x Meta. Best for AOV ₹5K+ deals.</p><div class="scale-meta"><span class="scale-impact">2-3x qualified lead rate</span><span class="scale-effort">3-4 wks · setup + qualification</span></div><p class="scale-prereq"><strong>Prerequisite · </strong>LinkedIn ad account · ICP titles defined</p></div><div class="scale-row"><span class="scale-rank">04</span><h4 class="scale-title">Add email + SMS retention layer</h4><p>Acquisition without retention is a leaky bucket. Implement abandoned-cart + welcome + win-back flows · industry recovery rates 8-15% of cart-abandons. This compounds on every dollar of paid spend you already commit.</p><div class="scale-meta"><span class="scale-impact">+10-15% account revenue · no new ad spend</span><span class="scale-effort">2-3 wks · flow build</span></div><p class="scale-prereq"><strong>Prerequisite · </strong>Email capture configured · ESP selected</p></div><div class="scale-row"><span class="scale-rank">05</span><h4 class="scale-title">Organic social + AI visibility · the half paid tools don't see</h4><p>Page 15 covers your SEO/AEO/GEO/AIV gaps. Paid + organic compound · organic feeds Andromeda audience-quality signal (engaged viewers · saves · shares) which lowers paid CPM long-term.</p><div class="scale-meta"><span class="scale-impact">Long-term CPM -10-20%</span><span class="scale-effort">ongoing · 1-2 posts/wk min</span></div><p class="scale-prereq"><strong>Prerequisite · </strong>Brand voice + content cadence</p></div>
+  <p class="kicker-label">WATCH AS FIXES SETTLE</p>
+  <div class="watch-row"><h4 class="scale-title">CPM drift · daily check <span class="watch-tag status-watch">WATCH</span></h4><p>Sudden CPM spike >20% week-over-week usually indicates auction-pressure shift, creative fatigue regression, or audience saturation.</p><p class="watch-threshold"><strong>Threshold · </strong>CPM +20% WoW = investigate within 48hrs</p></div><div class="watch-row"><h4 class="scale-title">CPL drift · weekly <span class="watch-tag status-watch">WATCH</span></h4><p>CPL trending up 20%+ vs trailing 4-week average signals lead-quality decay or auction shift.</p><p class="watch-threshold"><strong>Threshold · </strong>CPL +20% vs trailing-4-wk = investigate audience + creative quality</p></div><div class="watch-row"><h4 class="scale-title">Festive sequence post-mortem <span class="watch-tag status-watch">WATCH</span></h4><p>After the key-event window closes, compare actual revenue lift vs page 7 trajectory. Calibrates next event's planning.</p><p class="watch-threshold"><strong>Threshold · </strong>Actual lift <70% of trajectory = creative or sequencing miss · review before next event</p></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>What changed · intel briefing</span><span class="kicker-num">10 / 16</span></div>
+  <h2 class="page-title">Platform shifts that affect your account.</h2>
+  <p class="page-deck">Dated platform updates filtered to what you actually run. Each AFFECTS YOU line is data-driven from your stack.</p>
+  <div class="platform-update"><span class="platform-tag">META</span> · <span class="platform-date">May 15, 2026</span><h3 class="platform-headline">Meta renames 'Attribution setting' to 'Conversion window' · old reports break</h3><p>Field renamed in Ads Manager, Marketing API (v25.0+), and exported reports. Every saved report, Looker Studio connector, and BI pipeline referencing the old field name returns null after 2026-06-01.</p><div class="affects-you"><strong>AFFECTS YOU · </strong>Audit your saved reports + Looker Studio connectors before June 1.</div></div><div class="platform-update"><span class="platform-tag">AI / MCP</span> · <span class="platform-date">April 29, 2026</span><h3 class="platform-headline">Meta Ads MCP server live in Claude Desktop and ChatGPT</h3><p>MCP server at mcp.facebook.com/ads · OAuth · real-time campaign data inside Claude Desktop + ChatGPT. Free during beta. Founders can query 'which creatives are fatiguing' against live data.</p><div class="affects-you"><strong>AFFECTS YOU · </strong>Use Meta MCP for fast reporting. Use AdX for WHY + WHAT to fix first + vertical-specific benchmarks.</div></div><div class="platform-update"><span class="platform-tag">META</span> · <span class="platform-date">April 15, 2026</span><h3 class="platform-headline">One-click Meta-native CAPI · zero dev · zero cost</h3><p>Zero-config CAPI in Events Manager. No app, no dev, Meta handles server. CAPI+Pixel = 17.8% lower CPR on average (Meta benchmark).</p><div class="affects-you"><strong>AFFECTS YOU · </strong>Your account uses Meta · upper-funnel EMQ can be improved by enabling Customer ID + first-party cookies (15-25% attribution recovery typical).</div></div><div class="platform-update"><span class="platform-tag">GOOGLE</span> · <span class="platform-date">Jan 2026 · ongoing</span><h3 class="platform-headline">Chrome third-party cookie deprecation · indefinite delay continuing</h3><p>Google's Chrome cookie deprecation timeline pushed again · now 'no firm date'. Privacy Sandbox APIs (Topics · Attribution Reporting) in production but adoption slow. Cookieless transition is happening de-facto via consent + Safari/Firefox baselines.</p><div class="affects-you"><strong>AFFECTS YOU · </strong>Don't wait for the official deprecation · ~40% of traffic is already cookieless (Safari + ATT). Invest in server-side tagging + 1st-party data NOW.</div></div><div class="platform-update"><span class="platform-tag">AI / SEARCH</span> · <span class="platform-date">Dec 2025</span><h3 class="platform-headline">Perplexity Pro 'shopping comparisons' launches · structured product schema critical</h3><p>Perplexity Pro now generates side-by-side product comparisons from web schema + reviews. Brands with proper Product schema (price · review · availability) appear · brands without are invisible.</p><div class="affects-you"><strong>AFFECTS YOU · </strong>Audit your Product schema on PDP · ensure JSON-LD is complete · this is now a discovery surface, not just SEO.</div></div><div class="platform-update"><span class="platform-tag">META</span> · <span class="platform-date">Sept 2025 · expanded default</span><h3 class="platform-headline">Advantage+ Shopping Campaigns now Meta's default acquisition</h3><p>Advantage+ (Meta's automated campaign type) is now the recommended default for DTC acquisition. Manual ABO/CBO campaigns get less algorithmic budget priority. Brands holding back on Advantage+ are competing for second-tier impressions.</p><div class="affects-you"><strong>AFFECTS YOU · </strong>Test Advantage+ Shopping with 20-30% of acquisition budget. Manual campaigns alongside · don't replace immediately · measure ROAS in parallel for 14 days.</div></div>
+  <p class="kicker-label">WHY ADX BEATS LLMS + MCP ALONE</p>
+  <p>LLMs+MCP read your data. They can't rank by dollar impact · diagnose root cause (multiple plausible reasons ROAS drops — they show the chart · AdX ranks the causes) · prescribe sequenced action · or remember across runs. LLMs+MCP = reporting. AdX = diagnosis + action.</p>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Your sequenced action plan</span><span class="kicker-num">11 / 16</span></div>
+  <h1 class="section-headline">Three items. <span class="italic">Sequenced by impact.</span></h1>
+  <p class="lede">Ordered by recoverable dollars per hour of effort. Quick wins first. Strategic last. Your pace, your sequence. Re-run AdX after fixes ship to see your new score.</p>
+  <div class="plan-summary-bar"><div class="plan-summary-seg s1" style="flex:100;"><span>CRITICAL FIXES</span><span class="pct">₹100</span></div></div>
+  <div class="plan-band"><div class="plan-band-header"><span class="plan-band-title">Critical Fixes · 1-2 Weeks</span><span class="plan-band-recovers">Recovers ₹100/mo</span></div><p class="plan-band-sub">~61 hrs total work · sequence by recoverable dollars.</p><div class="plan-action"><span class="plan-action-arrow">→</span><p class="plan-action-text">Pixel Not Firing on Conversion Page <span class="meta">30 MIN · ₹21,600/mo</span></p></div><div class="plan-action"><span class="plan-action-arrow">→</span><p class="plan-action-text">Andromeda Hot-Pool Penalty · Weak Hook + High Frequency <span class="meta">1-2 HRS · ₹6,000/mo</span></p></div><div class="plan-action"><span class="plan-action-arrow">→</span><p class="plan-action-text">Audience Fragmentation Across Too Many Ad Sets <span class="meta">30 MIN · ₹6,000/mo</span></p></div></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Creatives + Audience</span><span class="kicker-num">12 / 16</span></div>
+  <h2 class="page-title">What's working · creatives + audience.</h2>
+  <p class="page-deck">Creative is the new targeting · audience tells you who's converting. Two signals · one page.</p>
+
+  <p class="kicker-label">CREATIVE PULSE</p>
+  <table class="creative-pulse-table">
+    <thead><tr><th>Concept</th><th>Hook Rate</th><th>CPL</th><th>Verdict</th></tr></thead>
+    <tbody><tr><td>Carousel-Returns-A</td><td>18% ↓↓</td><td>₹2025 ↑↑</td><td class="verdict-kill">KILL</td></tr><tr><td>Complete-Targeting-B</td><td>32% ✓</td><td>₹1823 ✓</td><td class="verdict-winning">WINNING</td></tr><tr><td>Static-Founder-Story</td><td>21% ↓</td><td>₹1690 ↑</td><td class="verdict-fatigued">FATIGUED</td></tr><tr><td>Video-Returns-Demo</td><td>27% ↓</td><td>₹1190 ↑</td><td class="verdict-winning">WINNING</td></tr><tr><td>Reels-Testimonial</td><td>15% ↓↓</td><td>₹769 ↑↑</td><td class="verdict-kill">KILL</td></tr></tbody>
+  </table>
+  <p class="pulse-summary">2 winning · 1 fatigued · 2 to retire · 5 concepts · gap of 5 to reach Andromeda 10+ density</p>
+
+  <p class="kicker-label" style="margin-top:14mm;">AUDIENCE PULSE</p>
+  <table class="creative-pulse-table">
+    <thead><tr><th>Audience</th><th>Reach %</th><th>Frequency</th><th>CPL</th><th>Verdict</th></tr></thead>
+    <tbody><tr><td>IN-Tier1-25-44-HNW</td><td>62%</td><td>3.8</td><td>₹1974</td><td class="verdict-fatigued">FATIGUED</td></tr><tr><td>IN-Tier1-35-55-Biz</td><td>78%</td><td>4.2</td><td>₹1270</td><td class="verdict-fatigued">FATIGUED</td></tr><tr><td>IN-Metro-Investor-LAL</td><td>45%</td><td>2.9</td><td>₹1437</td><td class="verdict-neutral">STEADY</td></tr><tr><td>IN-Tier2-Cold-Broad</td><td>35%</td><td>2.1</td><td>₹1429</td><td class="verdict-neutral">STEADY</td></tr></tbody>
+  </table>
+  <p class="pulse-summary">→ <strong>Where to expand · no clear winner yet · test 2-3 new LAL seeds from top-LTV customers</strong></p>
+  <p class="pulse-summary">→ <strong>Where to retire · IN-Tier1-25-44-HNW (reach 62% · freq 3.8) · cap or pause · audience exhausted</strong></p>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Copilot · Creative</span><span class="kicker-num">13 / 16</span></div>
+  <h2 class="page-title">3 creative angles · fintech band.</h2>
+  <p class="page-deck">Concepts informed by vertical-winning hook patterns + AOV/spend tier.</p>
+  <div class="creative-card"><span class="creative-rank">ANGLE 01</span><h3 class="creative-title">"Real result · real timeline" (proof hook) · <span class="creative-format">video</span></h3><p class="creative-hook">"After 30 days</p><div class="creative-section"><div class="creative-section-label">BODY · PRODUCTION GUIDANCE</div><p>Open with the hook at 0:00 · pattern-interrupt visual by 0:03 · specific timeline + observable proof · beats vague before/after · close on emotional resolution + CTA.</p></div><div class="creative-section"><div class="creative-section-label">CTA</div><p class="creative-cta">Book a demo</p></div><div class="creative-meta"><strong>When to use · </strong>Any vertical · works in apparel · skincare · food · fitness</div><div class="creative-meta"><strong>Why this works · </strong>This hook pattern wins for the vertical · proven on competitor ad sets</div></div><div class="creative-card"><span class="creative-rank">ANGLE 02</span><h3 class="creative-title">Case study · proof-led · <span class="creative-format">static + video</span></h3><p class="creative-hook">"How [Company] cut their [pain] 40% with Confidential Fintech IN"</p><div class="creative-section"><div class="creative-section-label">BODY · PRODUCTION GUIDANCE</div><p>Lead with the metric · name the company · show the before/after dashboard · 3-sentence quote from the buyer.</p></div><div class="creative-section"><div class="creative-section-label">CTA</div><p class="creative-cta">Book a demo</p></div><div class="creative-meta"><strong>When to use · </strong>Cold B2B · target-account list · mid-funnel re-engagement</div><div class="creative-meta"><strong>Why this works · </strong>B2B converts on specific outcomes + named accounts · not on features</div></div><div class="creative-card"><span class="creative-rank">ANGLE 03</span><h3 class="creative-title">Benefit stack · differentiation · <span class="creative-format">static carousel</span></h3><p class="creative-hook">"Why Confidential Fintech IN is different."</p><div class="creative-section"><div class="creative-section-label">BODY · PRODUCTION GUIDANCE</div><p>5-slide carousel · 1 benefit per slide · close with comparison-vs-competitor slide. Single message per slide · big text · brand colors.</p></div><div class="creative-section"><div class="creative-section-label">CTA</div><p class="creative-cta">Book a demo</p></div><div class="creative-meta"><strong>When to use · </strong>Mid-funnel · audience that knows the category but not the brand</div><div class="creative-meta"><strong>Why this works · </strong>Carousel formats outperform single-image for consideration-stage · low CPM</div></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Copilot · Budget</span><span class="kicker-num">14 / 16</span></div>
+  <h2 class="page-title">If you scaled · where should it go?</h2>
+  <p class="page-deck">Current: ₹120,000/mo across 1 platforms. Allocation logic = vertical weights + finding-driven shifts.</p>
+  <div style="display:flex;align-items:center;gap:24px;margin:14px 0;"><svg width="200" height="200" viewBox="0 0 200 200" style="flex-shrink:0;"><path d="M 100.0,100.0 L 100.0,20.0 A 80.0,80.0 0 1 1 35.3,53.0 Z" fill="#E8601F" stroke="#F2EADC" stroke-width="2"/><text x="123.6" y="150.3" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#F2EADC" text-anchor="middle">85%</text><path d="M 100.0,100.0 L 35.3,53.0 A 80.0,80.0 0 0 1 100.0,20.0 Z" fill="#1D9E75" stroke="#F2EADC" stroke-width="2"/><text x="76.4" y="57.7" font-family="JetBrains Mono,monospace" font-size="11" font-weight="700" fill="#F2EADC" text-anchor="middle">15%</text></svg><div style="flex:1;"><div style="display:flex;align-items:center;gap:6px;font-family:JetBrains Mono,monospace;font-size:11px;margin-bottom:4px;"><span style="width:12px;height:12px;background:#E8601F;border-radius:2px;"></span><span style="color:#1F1F23;font-weight:600;">Meta (Facebook + Instagram)</span><span style="color:#6B6457;margin-left:auto;">₹102,000</span></div><div style="display:flex;align-items:center;gap:6px;font-family:JetBrains Mono,monospace;font-size:11px;margin-bottom:4px;"><span style="width:12px;height:12px;background:#1D9E75;border-radius:2px;"></span><span style="color:#1F1F23;font-weight:600;">TikTok (test layer)</span><span style="color:#6B6457;margin-left:auto;">₹18,000</span></div></div></div>
+  <div class="budget-card"><div class="budget-head"><h4>Meta (Facebook + Instagram)</h4><span class="budget-delta delta-flat">₹18,000/mo</span></div><div class="budget-amounts"><span><span class="budget-amount-label">Current</span> ₹120,000/mo</span><span><span class="budget-amount-label">Recommended</span> ₹102,000/mo (85%)</span></div><p class="budget-rationale">For fintech brands · Meta drives 55-65% of paid acquisition. Anchor channel · creative+audience signals best optimized here.</p></div><div class="budget-card"><div class="budget-head"><h4>TikTok (test layer)</h4><span class="budget-delta delta-up">+₹18,000/mo</span></div><div class="budget-amounts"><span><span class="budget-amount-label">Current</span> —</span><span><span class="budget-amount-label">Recommended</span> ₹18,000/mo (15%)</span></div><p class="budget-rationale">Test layer · TikTok Symphony lowers creative-ops cost 30-40%. Start small · scale on ROAS proof. Critical for Gen-Z + skincare/apparel/food verticals.</p></div>
+  <p style="font-family:var(--mono);font-size:11px;color:var(--grey-500);text-align:center;margin:14px 0;letter-spacing:0.06em;">Total current: ₹120,000/mo · Total recommended: ₹120,000/mo · no net change</p>
+  <p class="kicker-label">REVENUE TRAJECTORY BY PATH</p>
+  <div class="path-card"><div class="path-head"><h4>Conservative</h4><span class="risk-low">LOW · no incremental spend</span></div><p>Hold current spend at ₹120,000/mo · close the 6 findings · capture ₹44,520/mo recoverable. No new tests. Best when cash-constrained.</p><div class="path-stats"><span><span class="path-stat-label">Monthly</span> ₹120,000/mo</span><span><span class="path-stat-label">Expected lift</span> +₹26,712/mo within 6 weeks</span></div></div><div class="path-card"><div class="path-head"><h4>Balanced</h4><span class="risk-medium">MEDIUM · test-budget at risk if creative fails</span></div><p>Hold core spend · add ₹18,000/mo (15%) for TikTok test + creative volume ramp. Close findings AND test scale. Best when fundamentals are healthy.</p><div class="path-stats"><span><span class="path-stat-label">Monthly</span> ₹138,000/mo</span><span><span class="path-stat-label">Expected lift</span> +₹67,164/mo within 8 weeks</span></div></div><div class="path-card"><div class="path-head"><h4>Aggressive</h4><span class="risk-high">HIGHER · 40% spend ramp requires creative + ops capacity</span></div><p>Increase total to ₹168,000/mo (+40%) · scale creative · launch TikTok + LinkedIn · book festive blueprint. Best when account is healthy + clear path to scale.</p><div class="path-stats"><span><span class="path-stat-label">Monthly</span> ₹168,000/mo</span><span><span class="path-stat-label">Expected lift</span> +₹140,520/mo within 12 weeks</span></div></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Copilot · Organic + AI visibility</span><span class="kicker-num">15 / 16</span></div>
+  <h2 class="page-title">The other half of your funnel.</h2>
+  <p class="page-deck">SEO · AEO (answer-engine optimization) · GEO (geo-engine optimization) · AI visibility (ChatGPT · Claude · Perplexity citation). Paid tools don't see this.</p>
+  <div class="vis-grid"><div class="vis-cell vis-improvable"><svg width="110" height="110" viewBox="0 0 110 110" style="display:block;"><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8DFD0" stroke-width="8"/><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#BA7517" stroke-width="8" stroke-dasharray="113.7 128.2" stroke-dashoffset="60.5" transform="rotate(-90 55.0 55.0)" stroke-linecap="round"/><text x="55.0" y="61.0" font-family="Playfair Display,serif" font-size="22" font-weight="900" fill="#1F1F23" text-anchor="middle">47</text></svg><div class="vis-pillar">SEO</div><div class="vis-label">Search Visibility</div><div class="vis-method">DERIVED</div><div class="vis-note">Derived from organic-social activity + lifecycle stage + category competitiveness (60/100 difficulty).</div></div><div class="vis-cell vis-weak"><svg width="110" height="110" viewBox="0 0 110 110" style="display:block;"><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8DFD0" stroke-width="8"/><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8601F" stroke-width="8" stroke-dasharray="67.7 174.2" stroke-dashoffset="60.5" transform="rotate(-90 55.0 55.0)" stroke-linecap="round"/><text x="55.0" y="61.0" font-family="Playfair Display,serif" font-size="22" font-weight="900" fill="#1F1F23" text-anchor="middle">28</text></svg><div class="vis-pillar">AEO</div><div class="vis-label">AI Overview Ready</div><div class="vis-method">ESTIMATED</div><div class="vis-note">Estimated · live test pending. AEO measures Google AI Overviews + featured-snippet capture. Live test requires WebSearch</div></div><div class="vis-cell vis-weak"><svg width="110" height="110" viewBox="0 0 110 110" style="display:block;"><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8DFD0" stroke-width="8"/><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8601F" stroke-width="8" stroke-dasharray="48.4 193.5" stroke-dashoffset="60.5" transform="rotate(-90 55.0 55.0)" stroke-linecap="round"/><text x="55.0" y="61.0" font-family="Playfair Display,serif" font-size="22" font-weight="900" fill="#1F1F23" text-anchor="middle">20</text></svg><div class="vis-pillar">GEO</div><div class="vis-label">Generative-Engine Fit</div><div class="vis-method">ESTIMATED</div><div class="vis-note">Estimated · live test pending. GEO measures generative-engine results (Perplexity Pages · ChatGPT). Live test in v1.1.</div></div><div class="vis-cell vis-weak"><svg width="110" height="110" viewBox="0 0 110 110" style="display:block;"><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8DFD0" stroke-width="8"/><circle cx="55.0" cy="55.0" r="38.5" fill="none" stroke="#E8601F" stroke-width="8" stroke-dasharray="94.3 147.6" stroke-dashoffset="60.5" transform="rotate(-90 55.0 55.0)" stroke-linecap="round"/><text x="55.0" y="61.0" font-family="Playfair Display,serif" font-size="22" font-weight="900" fill="#1F1F23" text-anchor="middle">39</text></svg><div class="vis-pillar">AIV</div><div class="vis-label">AI Assistant Citation</div><div class="vis-method">ESTIMATED</div><div class="vis-note">Estimated · proxy from brand-age + spend signal. AIV measures actual citation in Claude/ChatGPT/Perplexity shopping quer</div></div></div>
+  <div class="organic-fix"><h4>Publish 4-6 'best X for Y' articles · category-driven SEO play</h4><p>For your vertical (fintech), the highest-converting organic queries are comparison-format ('best X for Y' · 'X vs Y'). Publish 4-6 long-form articles targeting the top buyer queries on page 15. Optimize for AI Overviews structured content (definition · comparison table · FAQ schema).</p><div class="organic-meta"><span class="scale-impact">+15-25% organic traffic in 90 days</span><span class="scale-effort">2-3 wks · content production</span></div></div><div class="organic-fix"><h4>Implement FAQ schema + structured data on top 5 PDPs</h4><p>Google AI Overviews + Perplexity surface answers from STRUCTURED content. Add FAQPage schema to top 5 product pages · include 3-5 'common questions' with concise answers. Verify in Google Rich Results Test. This is the fastest AEO lift available.</p><div class="organic-meta"><span class="scale-impact">+10-20% AI Overviews surface rate</span><span class="scale-effort">1 wk · dev + content</span></div></div><div class="organic-fix"><h4>Seed AI-citable content · authoritative listicles + comparison pages</h4><p>Claude/ChatGPT/Perplexity surface brands that appear on AUTHORITATIVE comparison pages. Sponsor or earn placements on category-authority sites (e.g. NYMag's Strategist · Reviewed · Wirecutter equivalents in your vertical). These training-data signals compound for months.</p><div class="organic-meta"><span class="scale-impact">AIV +15-25 points in 6 months</span><span class="scale-effort">3-6 months · authoritative-site outreach</span></div></div>
+  <p class="kicker-label">AI VISIBILITY · 10 BUYER-STYLE QUERIES TESTED</p>
+  <div class="queries-dark"><div class="query-row"><div class="query-q">"best meal kit for busy parents"</div><div class="query-surface">Google AI Overviews</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"healthy frozen meals delivered"</div><div class="query-surface">Perplexity</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"best authentic indian food delivery"</div><div class="query-surface">ChatGPT</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"subscription meal box vs grocery shopping"</div><div class="query-surface">Claude</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"what's the best meal kit service"</div><div class="query-surface">Google AI Overviews</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"affordable healthy meal delivery"</div><div class="query-surface">Perplexity</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"best gluten-free meal delivery"</div><div class="query-surface">ChatGPT</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"meal kit reviews 2026"</div><div class="query-surface">Claude</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"best Indian food subscription"</div><div class="query-surface">Google AI Overviews</div><div class="query-pending">○ PENDING</div></div><div class="query-row"><div class="query-q">"vegetarian meal delivery options"</div><div class="query-surface">Perplexity</div><div class="query-pending">○ PENDING</div></div></div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+
+<div class="page">
+  <div class="kicker"><span>Copilot · What's next</span><span class="kicker-num">16 / 16</span></div>
+  <h2 class="page-title">What's next · run sequence + festive blueprint.</h2>
+  <p class="page-deck">Forward calendar. When to run Playbook #2. Festive windows. ClappX graduation path.</p>
+  <div class="baseline-block"><div class="baseline-label">BASELINE LOCKED · FIRST PLAYBOOK</div><div class="baseline-body">1 platform reconciled · 94 signals scanned · 90-day window. Your re-run cadence is your call · weekly · biweekly · monthly · or on demand. Each re-run diffs against this baseline · shows what closed · what drifted · what's new.</div></div>
+  <p class="kicker-label">3-PHASE LAUNCH SEQUENCE</p>
+  <div class="phase-card"><span class="phase-label">PHASE 1 · Awareness window</span><h4 class="phase-role">Awareness</h4><p>Reach campaigns to past buyers + lookalike. Brand creative · 20% of spend.</p></div><div class="phase-card"><span class="phase-label">PHASE 2 · Conversion window</span><h4 class="phase-role">Conversion</h4><p>Single CBO · cold + warm (90d engagers). 3-5 concepts from page 13 · 60% of spend.</p></div><div class="phase-card"><span class="phase-label">PHASE 3 · Urgency window</span><h4 class="phase-role">Urgency</h4><p>"Order by [date] to ship for your next event window." Retargeting + Reels · 20% of spend.</p></div>
+  <p class="kicker-label">KEEPS GETTING SMARTER · YOUR COPILOT COMPOUNDS</p>
+  <div class="run-rows-dark"><div class="run-row"><div class="run-label">RUN 2 (next cycle)</div><div>Delta vs Run 1 · which findings closed · which drifted · which new</div></div><div class="run-row"><div class="run-label">RUN 3</div><div>6-month trajectory · AOV lift validation · seasonal calendar</div></div><div class="run-row"><div class="run-label">RUN 4 (+ GA4 + email)</div><div>Full attribution split · organic vs paid vs email · true CAC by channel</div></div><div class="run-row"><div class="run-label">RUN 7 (Year 1)</div><div>State-of-account · YoY trends · category shifts · expansion-ready signals</div></div></div>
+  <div class="optin-block">
+    <div class="optin-title">DRIFT ALERTS — SIGNAL ONLY · NO DAILY EMAILS</div>
+    <div class="optin-body">Email only when something material changes · CPM spike >20% · ROAS drop >15% · diagnostic error · EMQ regression. Signal-driven · not calendar.</div>
+    <div class="optin-form">
+      <span class="optin-input">vinay@confidentialfintechin.com</span>
+      <a href="#" class="optin-btn">Enable drift alerts</a>
+    </div>
+  </div>
+  <div class="bridge-block">
+    <div class="bridge-label">WHEN YOU OUTGROW ONE-OFF COPILOTS</div>
+    <div class="bridge-headline">ClappX runs this <span class="it">continuously.</span></div>
+    <div class="bridge-body">AdX = on-demand. ClappX = continuous · same engine running daily · drift detected before you notice · creative refresh as winners emerge · organic + AI monitoring always on. ₹999/mo · single brand.</div>
+    <a href="#" class="bridge-cta">See ClappX →</a>
+  </div>
+  <div class="footer-meta">AdX · by ClappX · ADX-CONFIDENTIALFINTECHIN-2026-05-20</div>
+</div>
+</body></html>
