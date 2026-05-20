@@ -16,6 +16,94 @@ Cross-refs: [`ARCHITECTURE.md`](ARCHITECTURE.md) (strategic) · [`EVALUATORS.md`
 
 Twenty gates fire between raw `scan_data` and final Playbook HTML. They're what separates a shippable product from internal debug output. **Do not bypass.**
 
+### Canonical signatures · the only functions you call
+
+Every entry-point function used during emission, with full type signature. Each is verified against source.
+
+```python
+# ── ENGINE ENTRY (you call these) ─────────────────────────────────────
+def run_engine(eng: EngineInput) -> AuditReport
+def ship_playbook(eng: EngineInput, max_seconds: int = 8) -> ShipResult
+async def ship_playbook_async(eng: EngineInput, max_seconds: int = 8) -> ShipResult
+def deliver_playbook(eng: EngineInput, ...) -> DeliverResult
+def to_legacy_audit_report(ship: ShipResult, brand_id: str, currency_symbol: str = "$") -> AuditReport
+def set_logger(logger: logging.Logger) -> None
+def register_playbook_routes(app: FastAPI, auth_dependency: Callable | None = None) -> None
+
+# ── ASSEMBLY (engine calls these · documented so you know the chain) ──
+# pipeline.py
+def run_engine(eng: EngineInput) -> AuditReport         # detects problems, scores, prioritizes
+
+# scoring.py
+def compute_score(findings: list[DetectedProblem],
+                  platforms_connected: set[str] | None = None
+) -> tuple[int, dict[str, int]]                          # → (overall_score, per_category_scores)
+
+def prioritize_findings(findings: list[DetectedProblem],
+                        monthly_spend: float,
+                        top_n: int = 14
+) -> tuple[list[DetectedProblem], list[DetectedProblem], dict]   # → (surfaced, deferred, stats)
+
+def cap_recoverable_at_spend(recoverable: dict,
+                             monthly_spend: float,
+                             cap_pct: float = 0.80) -> dict      # G7 80% cap
+
+def compute_recoverable(findings: list[DetectedProblem]) -> dict[str, float]   # G8 SOT
+def cumulative_recovery_trajectory(findings: list[DetectedProblem]) -> dict[str, float]
+
+# agents/context_assembler.py
+def assemble(eng: EngineInput, report: AuditReport) -> PageContext
+
+# composer.py
+def render_playbook(ctx: PageContext) -> str             # → final HTML
+def _buyer_safe(text: str, currency_symbol: str = "$") -> str          # G1
+def _final_currency_sweep(html: str, currency_symbol: str) -> str      # G2
+
+# ── PRE-EMISSION QUALITY GATES (engine calls these · do NOT skip) ─────
+# agents/founder_review.py
+def run_founder_review(ctx: PageContext) -> FounderReview            # G11 · returns 6 FounderCheckResult
+
+# agents/qa_gate.py
+def run_qa_gate(ctx: PageContext,
+                rendered_html: str | None = None) -> QAReport         # G12 · returns 7 QACheckResult
+
+# agents/differential_thinking.py
+def enforce_all(findings: list[DetectedProblem]) -> list[DetectedProblem]   # G9
+
+# agents/trust_ratio_enforcer.py
+def enforce(findings: list[DetectedProblem]) -> TrustReport                  # G3
+
+# agents/context_loader.py (run-history + delta)
+def compute_delta(eng: EngineInput, current_report: AuditReport) -> RunDelta
+def save_run(eng: EngineInput, report: AuditReport) -> Path
+def load_prior_run(brand_id: str) -> dict | None
+
+# agents/anonymizer.py (samples only · G20 · NEVER on customer Playbooks)
+def hash_id(value: str, salt: str = "adx-clapp-2026") -> str
+def scrub_text(text: str) -> str
+def scrub_finding(finding_dict: dict, mode: str = "light") -> dict
+def scrub_brand_profile(profile: dict, mode: str = "light") -> dict
+```
+
+**Pre-emission call order** (inside `ship_playbook()`):
+```
+  eng = EngineInput(...)
+  → run_engine(eng) → AuditReport
+  → differential_thinking.enforce_all(findings)        # G9
+  → trust_ratio_enforcer.enforce(findings)             # G3
+  → assemble(eng, report) → PageContext
+  → founder_review.run_founder_review(ctx) → FounderReview     # G11 · 6 checks
+  → composer.render_playbook(ctx) → str                 # G1 fires per-element inside; G2 fires last
+  → qa_gate.run_qa_gate(ctx, rendered_html=html) → QAReport   # G12 · 7 checks
+  → return ShipResult(ok=True, html=html, report=report, founder_review=fr, qa_report=qa)
+```
+
+If `FounderReview.critical_count > 0` OR `QAReport.hard_fails > 0` → `ship.ok = False` and the orchestrator surfaces the failure list. You can still inspect `ship.html_path` for debugging, but the file should not ship to a customer.
+
+---
+
+
+
 ### Category 1 · Always-on global scrubbers (8)
 
 | # | Gate | Where | Purpose | Failure behavior |
